@@ -2,6 +2,11 @@ version: '3'
 
 services:
   owncloud:
+    dns:
+      - 10.210.23.181
+      - 10.210.23.198
+    dns_search:
+      - network.uni
     image: owncloud/server:${VERSION}
     restart: always
     ports:
@@ -11,6 +16,7 @@ services:
       - db
       - redis
     environment:
+      - OWNCLOUD_SUB_URL=/oc
       - OWNCLOUD_DOMAIN=${DOMAIN}
       - OWNCLOUD_DB_TYPE=mysql
       - OWNCLOUD_DB_NAME=owncloud
@@ -23,7 +29,7 @@ services:
       - OWNCLOUD_REDIS_ENABLED=true
       - OWNCLOUD_REDIS_HOST=redis
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:80/status.php"]
+      test: ["CMD", "curl", "-f", "http://localhost:80/oc/status.php"]
       interval: 30s
       timeout: 10s
       retries: 5
